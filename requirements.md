@@ -20,8 +20,8 @@
     - OFF - no preset
     - ORANGE - preset1
     - RED - preset2
-    - EDIT/BLINK - unsaved preset
-    - SAVED - 3 blinks
+    - when editing the unsaved preset led is blinking
+    - when saving the preset, LED blinks quickly 3 times
 - Potentiometers has to be responsive / real-time
 - On wall power off to on -> correct values has to be readed from physical potentiometers to digital ones
 - Button timing (B1 & B2):
