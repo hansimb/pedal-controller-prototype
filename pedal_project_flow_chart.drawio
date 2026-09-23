@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Page-1" id="qADh4I1eVca25vdcyoyH">
-    <mxGraphModel dx="1137" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1329" dy="669" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -29,9 +29,9 @@
           <mxGeometry height="80" width="80" x="360" y="200" as="geometry" />
         </mxCell>
         <mxCell id="b0HDrcx_KRbA0KUKAox1-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Potentiometers" vertex="1">
-          <mxGeometry height="30" width="60" x="250" y="150" as="geometry" />
+          <mxGeometry height="30" width="60" x="250" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="b0HDrcx_KRbA0KUKAox1-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Arduino" vertex="1">
+        <mxCell id="b0HDrcx_KRbA0KUKAox1-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="STM32F40" vertex="1">
           <mxGeometry height="100" width="250" x="200" y="380" as="geometry" />
         </mxCell>
         <mxCell id="b0HDrcx_KRbA0KUKAox1-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="PROJECT FLOW CHART" vertex="1">
@@ -62,13 +62,13 @@
           <mxGeometry height="50" width="50" x="670" y="290" as="geometry" />
         </mxCell>
         <mxCell id="b0HDrcx_KRbA0KUKAox1-12" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Buttons and button functions:" vertex="1">
-          <mxGeometry height="30" width="150" x="570" y="150" as="geometry" />
+          <mxGeometry height="30" width="150" x="570" y="170" as="geometry" />
         </mxCell>
         <mxCell id="b0HDrcx_KRbA0KUKAox1-13" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1. Normal press - Power ON/OFF" vertex="1">
           <mxGeometry height="30" width="115" x="517.5" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="b0HDrcx_KRbA0KUKAox1-15" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="2. Long press - Cycle preset" vertex="1">
-          <mxGeometry height="30" width="115" x="517.5" y="255" as="geometry" />
+        <mxCell id="b0HDrcx_KRbA0KUKAox1-15" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="2. Long press - Load preset" vertex="1">
+          <mxGeometry height="30" width="102.5" x="523.75" y="255" as="geometry" />
         </mxCell>
         <mxCell id="b0HDrcx_KRbA0KUKAox1-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1. Long press - Save preset to memory" vertex="1">
           <mxGeometry height="30" width="115" x="637.5" y="250" as="geometry" />
@@ -135,8 +135,8 @@
         <mxCell id="b0HDrcx_KRbA0KUKAox1-32" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="DP3" vertex="1">
           <mxGeometry height="60" width="60" x="365" y="650" as="geometry" />
         </mxCell>
-        <mxCell id="b0HDrcx_KRbA0KUKAox1-37" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Each connected to corresponding physical potentiometer" vertex="1">
-          <mxGeometry height="30" width="290" x="20" y="730" as="geometry" />
+        <mxCell id="b0HDrcx_KRbA0KUKAox1-37" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Each DP connected to corresponding physical potentiometer:" vertex="1">
+          <mxGeometry height="100" width="115" x="5" y="630" as="geometry" />
         </mxCell>
         <mxCell id="b0HDrcx_KRbA0KUKAox1-38" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;" value="LED1" vertex="1">
           <mxGeometry height="40" width="40" x="467.5" y="660" as="geometry" />
@@ -155,6 +155,18 @@
         </mxCell>
         <mxCell id="b0HDrcx_KRbA0KUKAox1-45" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;div align=&quot;left&quot;&gt;Potentiometer state management notes:&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Change to preset: overrides physical settings&lt;/div&gt;&lt;div&gt;In preset: edits the current preset and overrides the preset setting&lt;/div&gt;&lt;div&gt;OFF: direct controlling P-&amp;gt;DP&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="140" width="180" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="rE-StD30_LrbNUXwvofL-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Audio system" vertex="1">
+          <mxGeometry height="60" width="280" x="140" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="rE-StD30_LrbNUXwvofL-2" edge="1" parent="1" source="b0HDrcx_KRbA0KUKAox1-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.136;entryY=0.025;entryDx=0;entryDy=0;entryPerimeter=0;" target="rE-StD30_LrbNUXwvofL-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rE-StD30_LrbNUXwvofL-3" edge="1" parent="1" source="b0HDrcx_KRbA0KUKAox1-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=-0.046;entryDx=0;entryDy=0;entryPerimeter=0;" target="rE-StD30_LrbNUXwvofL-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rE-StD30_LrbNUXwvofL-4" edge="1" parent="1" source="b0HDrcx_KRbA0KUKAox1-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.796;entryY=0.002;entryDx=0;entryDy=0;entryPerimeter=0;" target="rE-StD30_LrbNUXwvofL-1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
