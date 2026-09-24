@@ -1,0 +1,6 @@
+#build output
+Debug/
+Release/
+
+#workspace
+.metadata/
