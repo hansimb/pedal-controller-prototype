@@ -4,3 +4,34 @@ Release/
 
 #workspace
 .metadata/
+
+
+# STM32CubeIDE build output
+Debug/
+Release/
+
+# Eclipse / STM32CubeIDE workspace metadata
+.metadata/
+
+# Generated build files
+*.o
+*.obj
+*.d
+*.su
+*.cyclo
+*.map
+*.elf
+*.hex
+*.bin
+*.list
+*.lst
+
+# Temporary / editor files
+*.tmp
+*.bak
+*~
+.DS_Store
+Thumbs.db
+
+# Optional IDE cache files
+.settings/language.settings.xml
