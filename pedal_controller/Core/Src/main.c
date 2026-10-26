@@ -126,9 +126,15 @@ int main(void)
     HAL_GPIO_WritePin(DigiPot1_GPIO_Port, DigiPot1_Pin, GPIO_PIN_SET);
     HAL_Delay(10); */
 
-    digipot_set(1, 0);
+    // test: set all, standby, change pot 1 in standby, wake up
+    digipot_set(1, 2048);
     digipot_set(2, 2048);
-    digipot_set(3, 4095);
+    digipot_set(3, 2048);
+    HAL_Delay(10);
+    digipot_enable(0); // standby: shutdown msg to each chip
+    HAL_Delay(10);
+    digipot_set(1, 4095);	// change pot1 in standby: jst remembering, nothing sent
+    digipot_enable(1);		// remembered value sent again
     HAL_Delay(10);
   }
   /* USER CODE END 3 */
