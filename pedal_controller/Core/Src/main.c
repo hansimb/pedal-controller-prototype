@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "digipot.h"
 #include "leds.h"
+#include "buttons.h"
 
 /* USER CODE END Includes */
 
@@ -66,6 +67,7 @@ static void MX_SPI2_Init(void);
 static void MX_TIM4_Init(void);
 void MX_USB_HOST_Process(void);
 
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -73,14 +75,14 @@ void MX_USB_HOST_Process(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-// wait ms milliseconds while the LED TIMING keeps running
+/*// wait ms milliseconds while the LED TIMING keeps running
 static void wait(uint32_t ms)
 {
 	uint32_t t = HAL_GetTick();
 
 	while (HAL_GetTick() - t < ms)
 		leds_tick();
-}
+}*/
 
 /* USER CODE END 0 */
 
@@ -119,8 +121,10 @@ int main(void)
   MX_USB_HOST_Init();
   MX_SPI2_Init();
   MX_TIM4_Init();
+
   /* USER CODE BEGIN 2 */
   leds_init();
+  leds_set(PWR_ON, M_LIVE, 0);
 
 
   /* USER CODE END 2 */
@@ -133,7 +137,7 @@ int main(void)
     MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
-
+/*
     // LED test: one state per second
     leds_set(PWR_ON, M_LIVE, 0);	// green only
     wait(1000);
@@ -147,7 +151,13 @@ int main(void)
     leds_set(PWR_DIM, M_P2, 0);		// standby: green dim, the rest off
     wait(1000);
   }
+  */
+
+    ev_t ev = button_event();
+    if (ev == EV_B1_SHORT) HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+    if (ev == EV_B1_LONG) HAL_GPIO_TogglePin(LD5_GPIO_Port, LD5_Pin);
   /* USER CODE END 3 */
+}
 }
 
 /**
@@ -422,9 +432,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(CS_I2C_SPI_GPIO_Port, CS_I2C_SPI_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(OTG_FS_PowerSwitchOn_GPIO_Port, OTG_FS_PowerSwitchOn_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, DigiPot1_Pin|DigiPot2_Pin|DigiPot3_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
@@ -437,13 +444,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(CS_I2C_SPI_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : OTG_FS_PowerSwitchOn_Pin */
-  GPIO_InitStruct.Pin = OTG_FS_PowerSwitchOn_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(OTG_FS_PowerSwitchOn_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pin : PDM_OUT_Pin */
   GPIO_InitStruct.Pin = PDM_OUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -454,7 +454,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_EVT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 

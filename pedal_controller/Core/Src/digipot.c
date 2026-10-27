@@ -2,7 +2,7 @@
  * digipot.c
  *
  *  Created on: Oct 25, 2026
- *      Author: Ashish Shrestha
+ *      Author: eagle
  */
 
 #include "main.h"

@@ -2,7 +2,7 @@
  * digipot.h
  *
  *  Created on: Oct 25, 2026
- *      Author: Ashish Shrestha
+ *      Author: eagle
  */
 
 #ifndef INC_DIGIPOT_H_
