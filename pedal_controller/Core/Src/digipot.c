@@ -40,7 +40,7 @@ void digipot_set(uint8_t ch, uint16_t val)
 	last[ch - 1] = val >> 4; /// remember the value, 12-bit down to 8-bit by dropping the 4 lowest bits
 
 	if (en) // in standby only remember the value
-		send(ch -1, 0x11, last[ch - 1]); // ox11 = write pot 0 (datasheet, sec 5.1)
+		send(ch - 1, 0x11, last[ch - 1]); // ox11 = write pot 0 (datasheet, sec 5.1)
 
 }
 

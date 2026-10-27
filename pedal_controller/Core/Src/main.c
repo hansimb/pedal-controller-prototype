@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "digipot.h"
+#include "leds.h"
 
 /* USER CODE END Includes */
 
@@ -49,6 +50,8 @@ I2S_HandleTypeDef hi2s3;
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 
+TIM_HandleTypeDef htim4;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -60,6 +63,7 @@ static void MX_I2C1_Init(void);
 static void MX_I2S3_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_SPI2_Init(void);
+static void MX_TIM4_Init(void);
 void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
@@ -68,6 +72,15 @@ void MX_USB_HOST_Process(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+// wait ms milliseconds while the LED TIMING keeps running
+static void wait(uint32_t ms)
+{
+	uint32_t t = HAL_GetTick();
+
+	while (HAL_GetTick() - t < ms)
+		leds_tick();
+}
 
 /* USER CODE END 0 */
 
@@ -105,10 +118,11 @@ int main(void)
   MX_SPI1_Init();
   MX_USB_HOST_Init();
   MX_SPI2_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
+  leds_init();
 
 
-  //uint8_t tx[2] = {0x11, 0x80}; // test for pulseview
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,22 +134,18 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    /* to test with pulseview
-    HAL_GPIO_WritePin(DigiPot1_GPIO_Port, DigiPot1_Pin, GPIO_PIN_RESET);
-    HAL_SPI_Transmit(&hspi2, tx, 2, 10);
-    HAL_GPIO_WritePin(DigiPot1_GPIO_Port, DigiPot1_Pin, GPIO_PIN_SET);
-    HAL_Delay(10); */
-
-    // test: set all, standby, change pot 1 in standby, wake up
-    digipot_set(1, 2048);
-    digipot_set(2, 2048);
-    digipot_set(3, 2048);
-    HAL_Delay(10);
-    digipot_enable(0); // standby: shutdown msg to each chip
-    HAL_Delay(10);
-    digipot_set(1, 4095);	// change pot1 in standby: jst remembering, nothing sent
-    digipot_enable(1);		// remembered value sent again
-    HAL_Delay(10);
+    // LED test: one state per second
+    leds_set(PWR_ON, M_LIVE, 0);	// green only
+    wait(1000);
+    leds_set(PWR_ON, M_P1, 0);		// green + orange
+    wait(1000);
+    leds_set(PWR_ON, M_P2, 1);		// green + red + blue (edited)
+    wait(1000);
+    leds_saved();	// save: 3 fast blue blinks
+    leds_set(PWR_ON, M_P2, 0);
+    wait(1000);
+    leds_set(PWR_DIM, M_P2, 0);		// standby: green dim, the rest off
+    wait(1000);
   }
   /* USER CODE END 3 */
 }
@@ -330,6 +340,65 @@ static void MX_SPI2_Init(void)
 }
 
 /**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 83;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 999;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
+  HAL_TIM_MspPostInit(&htim4);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -359,8 +428,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOD, DigiPot1_Pin|DigiPot2_Pin|DigiPot3_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin
-                          |Audio_RST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, LD3_Pin|LD5_Pin|LD6_Pin|Audio_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : CS_I2C_SPI_Pin */
   GPIO_InitStruct.Pin = CS_I2C_SPI_Pin;
@@ -404,10 +472,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
   HAL_GPIO_Init(CLK_IN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DigiPot1_Pin DigiPot2_Pin DigiPot3_Pin LD4_Pin
-                           LD3_Pin LD5_Pin LD6_Pin Audio_RST_Pin */
-  GPIO_InitStruct.Pin = DigiPot1_Pin|DigiPot2_Pin|DigiPot3_Pin|LD4_Pin
-                          |LD3_Pin|LD5_Pin|LD6_Pin|Audio_RST_Pin;
+  /*Configure GPIO pins : DigiPot1_Pin DigiPot2_Pin DigiPot3_Pin LD3_Pin
+                           LD5_Pin LD6_Pin Audio_RST_Pin */
+  GPIO_InitStruct.Pin = DigiPot1_Pin|DigiPot2_Pin|DigiPot3_Pin|LD3_Pin
+                          |LD5_Pin|LD6_Pin|Audio_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
