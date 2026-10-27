@@ -47,7 +47,7 @@ void leds_set(pwr_t power, pmode_t preset, uint8_t edited)
 		ccr = DIM;
 	__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, ccr);
 
-	if (power != PWR_ON)	//standby or off: on the green led may light
+	if (power != PWR_ON)	//standby
 	{
 		preset = M_LIVE;
 		edited = 0;
@@ -56,7 +56,7 @@ void leds_set(pwr_t power, pmode_t preset, uint8_t edited)
 	led(LD5_GPIO_Port, LD5_Pin, preset == M_P2);
 	edit = edited;
 
-	if (blinks == 0)	// during the saved signal blue is busy
+	if (blinks == 0)	// during the saved signal, blue is busy
 		led(LD6_GPIO_Port, LD6_Pin, edited);
 }
 
@@ -78,7 +78,7 @@ void leds_tick(void)
 	t0 = HAL_GetTick();
 	HAL_GPIO_TogglePin(LD6_GPIO_Port, LD6_Pin);
 	blinks--;
-	if (blinks == 0)	// signal done: back to the edited state
+	if (blinks == 0)	// back to the edited state
 		led(LD6_GPIO_Port, LD6_Pin, edit);
 
 }

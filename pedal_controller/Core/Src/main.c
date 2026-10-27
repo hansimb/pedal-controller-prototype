@@ -22,9 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "digipot.h"
-#include "leds.h"
-#include "buttons.h"
+#include "demo.h"
+
 
 /* USER CODE END Includes */
 
@@ -123,8 +122,10 @@ int main(void)
   MX_TIM4_Init();
 
   /* USER CODE BEGIN 2 */
-  leds_init();
-  leds_set(PWR_ON, M_LIVE, 0);
+  // leds_init();
+  // leds_set(PWR_ON, M_LIVE, 0);
+
+  demo_init();
 
 
   /* USER CODE END 2 */
@@ -151,11 +152,15 @@ int main(void)
     leds_set(PWR_DIM, M_P2, 0);		// standby: green dim, the rest off
     wait(1000);
   }
-  */
+
 
     ev_t ev = button_event();
     if (ev == EV_B1_SHORT) HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
     if (ev == EV_B1_LONG) HAL_GPIO_TogglePin(LD5_GPIO_Port, LD5_Pin);
+
+    */
+
+    demo_tick();
   /* USER CODE END 3 */
 }
 }

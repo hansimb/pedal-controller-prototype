@@ -35,8 +35,8 @@ void digipot_set(uint8_t ch, uint16_t val)
 
 	if (ch < 1 || ch > 3) // no such pot
 		return;
-	if (val > 4095) // keep it in the 12-bit range
-		val = 4095;
+	if (val > 4095)
+		val = 4095; // keep it in the 12-bit range
 	last[ch - 1] = val >> 4; /// remember the value, 12-bit down to 8-bit by dropping the 4 lowest bits
 
 	if (en) // in standby only remember the value
